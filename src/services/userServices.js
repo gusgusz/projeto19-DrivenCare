@@ -12,7 +12,17 @@ async function signUp({name,email,password,isDoctor}){
     const hashPassword = await bcrypt.hash(password, 15);
 
     await userRepositories.signUp({name,email,password: hashPassword,isDoctor});
+    
+}
 
+async function signUpDoctor({name, email, password, isDoctor, specialty}){
+    const {rowCount } = userRepositories.findByEmail(email);
+
+    if(rowCount) throw new errors.duplicatedEmailError(email);
+
+    const hashPassword = await bcrypt.hash(password, 15);
+
+    await userRepositories.signUp({name,email,password: hashPassword,isDoctor, specialty});
 }
 
 async function signIn({email, password}){
@@ -34,5 +44,6 @@ async function signIn({email, password}){
 
 export default {
   signUp,
+  signUpDoctor,
   signIn,
 };

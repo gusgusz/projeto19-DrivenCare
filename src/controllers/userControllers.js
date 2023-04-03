@@ -1,9 +1,12 @@
 import userServices from "../services/userServices.js";
 
 export async function signUp(req,res,next){
-    const {name, email, password, isDoctor} = req.body;
+    const {name, email, password, isDoctor, specialty} = req.body;
 
     try{
+        if(isDoctor && specialty){
+            userServices.signUpDoctor({name, email, password, isDoctor, specialty})
+        }
         userServices.signUp({name, email, password, isDoctor});
         return res.sendStatus(201);
     }
